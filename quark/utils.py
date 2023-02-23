@@ -20,25 +20,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+
 from __future__ import annotations
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import Any
 
-import discord
+class _MissingSentinel:
+    __slots__ = ()
 
-from aiohttp import ClientWebSocketResponse, ClientSession
+    def __bool__(self) -> bool:
+        return False
 
-from .utils import MISSING
-
-if TYPE_CHECKING:
-    from .node import Node
+    def __repr__(self):
+        return 'MISSING'
 
 
-class Websocket:
-    def __init__(self, node: "Node", *, session: ClientSession = MISSING):
-        self.node = node
-
-        if session is MISSING:
-            session = ClientSession()
-        
-        self.session: ClientSession = session
+MISSING: Any = _MissingSentinel()

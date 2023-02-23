@@ -21,24 +21,37 @@
 # SOFTWARE.
 
 from __future__ import annotations
+import os
 
-from typing import Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Any, Optional
 
 import discord
 
-from aiohttp import ClientWebSocketResponse, ClientSession
-
-from .utils import MISSING
-
 if TYPE_CHECKING:
-    from .node import Node
+    from .websocket import Websocket
 
 
-class Websocket:
-    def __init__(self, node: "Node", *, session: ClientSession = MISSING):
-        self.node = node
-
-        if session is MISSING:
-            session = ClientSession()
-        
-        self.session: ClientSession = session
+class Node:
+    def __init__(
+        self,
+        bot: discord.Client,
+        host: str,
+        port: int,
+        password: str,
+        https: bool,
+        heartbeat: float,
+        region: str,
+        identifier: str,
+        dumps: Callable[[Any], str],
+        resume_key: Optional[str],
+    ):
+        self.bot = bot
+        self.host = host
+        self.port = port
+        self.pasword = password
+        self.https = https
+        self.heartbeat = heartbeat
+        self.region = region
+        self.identifier = identifier
+        self.dumps = dumps
+        self.resume_key = resume_key or str(os.urandom(8).hex())
